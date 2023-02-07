@@ -1,0 +1,62 @@
+[
+  {
+  "name": "Heathrow",
+  "runwayLength": 3902,
+  "latitude": 51.4,
+  "longitude": -0.4
+  },
+  {
+    "name": "Charles de Gaulle",
+    "runwayLength": 2900,
+    "latitude": 49.0,
+    "longitude": 2.5
+  },
+  {
+    "name": "Berlin Brandenburg",
+    "runwayLength": 3600,
+    "latitude": 52.5,
+    "longitude": 13.4
+  },
+  {
+    "name": "Vienna International Airport",
+    "runwayLength": 2600,
+    "latitude": 48.0,
+    "longitude": 16.3
+  },
+  {
+    "name": "Ataturk International Airport",
+    "runwayLength": 3000,
+    "latitude": 40.9,
+    "longitude": 28.8
+  },
+  {
+    "name": "JFK",
+    "runwayLength": 4423,
+    "latitude": 40.6,
+    "longitude": -73.7
+  },
+  {
+    "name": "Henri Coanda International Airport",
+    "runwayLength": 3500,
+    "latitude": 44.4,
+    "longitude": 26.09
+  },
+  {
+    "name": "Marseille Provence Airport",
+    "runwayLength": 3440,
+    "latitude": 43.26,
+    "longitude": 5.13
+  },
+  {
+    "name": "Cairo International Airport",
+    "runwayLength": 4000,
+    "latitude": 30.0,
+    "longitude": 31.2
+  },
+  {
+    "name": "Sydney Airport",
+    "runwayLength": 3962,
+    "latitude": -33.9,
+    "longitude": 151.1
+  }
+]
