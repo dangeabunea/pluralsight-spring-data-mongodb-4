@@ -8,8 +8,8 @@ public class Aircraft {
     private int seatCapacity;
     private WakeTurbulence wakeTurbulence;
 
-    public Aircraft(String model, int seatCapacity, WakeTurbulence wakeTurbulence){
-        this.model= model;
+    public Aircraft(String model, int seatCapacity, WakeTurbulence wakeTurbulence) {
+        this.model = model;
         this.seatCapacity = seatCapacity;
         this.wakeTurbulence = wakeTurbulence;
     }

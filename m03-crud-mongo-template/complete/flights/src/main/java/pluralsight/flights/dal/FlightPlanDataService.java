@@ -5,6 +5,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.TextCriteria;
+import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.stereotype.Service;
 import pluralsight.flights.domain.AircraftFactory;
 import pluralsight.flights.domain.FlightPlan;
@@ -111,6 +113,17 @@ public class FlightPlanDataService {
 
         var query = new Query(withBoeing)
                 .with(Sort.by("aircraft.capacity").descending());
+        query.fields().include("id","aircraft");
+
+        return this.mongoTemplate.find(query, FlightPlan.class);
+    }
+
+    public List<FlightPlan> findByFullTextSearch(String value){
+        var criteria = TextCriteria
+                .forDefaultLanguage()
+                .matchingPhrase(value);
+
+        var query = TextQuery.queryText(criteria).sortByScore();
 
         return this.mongoTemplate.find(query, FlightPlan.class);
     }

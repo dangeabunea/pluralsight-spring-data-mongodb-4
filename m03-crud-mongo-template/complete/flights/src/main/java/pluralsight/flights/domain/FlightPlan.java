@@ -4,6 +4,7 @@ import org.bson.json.JsonObject;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -16,26 +17,35 @@ public class FlightPlan {
     private String id;
 
     @Field(name = "departure")
+    @TextIndexed
     private String departureCity;
 
     @Field(name = "destination")
+    @TextIndexed
     private String destinationCity;
 
     @Indexed(direction = IndexDirection.ASCENDING)
     private LocalDateTime departureDateTime;
 
     private int flightDuration;
+
+    @TextIndexed
     private List<String> crossedCountries;
     private boolean isInternational;
     private Aircraft aircraft;
 
+    // Used by Spring Data MongoDB for object creation
+    // See https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/#mapping-chapter
+    protected FlightPlan(){}
+
+    // Used inside application only
     public FlightPlan(String departureCity,
                       String destinationCity,
                       LocalDateTime departureDateTime,
                       int flightDuration,
                       List<String> crossedCountries,
                       boolean isInternational,
-                      Aircraft aircraft) {
+                      Aircraft aircraft){
         this.departureCity = departureCity;
         this.destinationCity = destinationCity;
         this.departureDateTime = departureDateTime;
