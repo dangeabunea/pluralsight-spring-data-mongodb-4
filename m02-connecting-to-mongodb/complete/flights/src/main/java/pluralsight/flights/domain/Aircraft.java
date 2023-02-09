@@ -25,4 +25,13 @@ public class Aircraft {
     public WakeTurbulence getWakeTurbulence() {
         return wakeTurbulence;
     }
+
+    @Override
+    public String toString() {
+        return "Aircraft {" +
+                "model='" + model + '\'' +
+                ", seats=" + seatCapacity +
+                ", turbulence=" + wakeTurbulence +
+                '}';
+    }
 }

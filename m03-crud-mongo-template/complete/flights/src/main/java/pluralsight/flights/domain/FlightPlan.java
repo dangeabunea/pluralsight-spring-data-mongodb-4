@@ -1,5 +1,6 @@
 package pluralsight.flights.domain;
 
+import org.bson.json.JsonObject;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -11,7 +12,8 @@ import java.util.List;
 
 @Document(collection = "FlightPlans")
 public class FlightPlan {
-    @Id private String id;
+    @Id
+    private String id;
 
     @Field(name = "departure")
     private String departureCity;
@@ -33,7 +35,7 @@ public class FlightPlan {
                       int flightDuration,
                       List<String> crossedCountries,
                       boolean isInternational,
-                      Aircraft aircraft){
+                      Aircraft aircraft) {
         this.departureCity = departureCity;
         this.destinationCity = destinationCity;
         this.departureDateTime = departureDateTime;
@@ -85,5 +87,20 @@ public class FlightPlan {
 
     public void setAircraft(Aircraft aircraft) {
         this.aircraft = aircraft;
+    }
+
+    @Override
+    public String toString() {
+        return "\nFlightPlan {" +
+                "\n id='" + id + '\'' +
+                ", \n departure='" + departureCity + '\'' +
+                ", \n destination='" + destinationCity + '\'' +
+                ", \n departsAt=" + departureDateTime +
+                ", \n duration=" + flightDuration +
+                ", \n crossedCountries=" + crossedCountries +
+                ", \n isInternational=" + isInternational +
+                ", \n aircraft=" + aircraft +
+                "\n" +
+                '}';
     }
 }

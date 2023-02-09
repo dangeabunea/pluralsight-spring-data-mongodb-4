@@ -86,4 +86,19 @@ public class FlightPlan {
     public void setAircraft(Aircraft aircraft) {
         this.aircraft = aircraft;
     }
+
+    @Override
+    public String toString() {
+        return "\nFlightPlan {" +
+                "\n id='" + id + '\'' +
+                ", \n departure='" + departureCity + '\'' +
+                ", \n destination='" + destinationCity + '\'' +
+                ", \n departsAt=" + departureDateTime +
+                ", \n duration=" + flightDuration +
+                ", \n crossedCountries=" + crossedCountries +
+                ", \n isInternational=" + isInternational +
+                ", \n aircraft=" + aircraft +
+                "\n" +
+                '}';
+    }
 }
