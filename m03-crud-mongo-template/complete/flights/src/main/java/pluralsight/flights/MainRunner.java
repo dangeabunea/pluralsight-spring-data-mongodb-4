@@ -28,15 +28,27 @@ public class MainRunner implements CommandLineRunner {
         this.flightPlanDataService.insertInitialFlightPlans();
 
         // read (query)
-        //System.out.println(this.flightPlanDataService.findById("63e3828b66251f063fcebd64"));
+        //System.out.println(this.flightPlanDataService.findById("63e383b9b64a16763c50e5c8"));
         //System.out.println(this.flightPlanDataService.findInternationalCrossingFrance());
         //System.out.println(this.flightPlanDataService.findFirstTwoFlightsWhichLastBetweenOneAndThreeHours());
-        System.out.println(this.flightPlanDataService.findBoeingFlightsAndOrderBySeatCapacity());
+        //System.out.println(this.flightPlanDataService.findBoeingFlightsAndOrderBySeatCapacity());
         //System.out.println(this.flightPlanDataService.findByFullTextSearch("France"));
 
         // update
 
+        /*
+        this.flightPlanDataService.incrementDepartureTime(
+                "63e383b9b64a16763c50e5c8",
+                LocalDateTime.of(2024,1,1,20,0)
+        );
+         */
+
+        //this.flightPlanDataService.changeDurationForFlightsInParis(100);
+
         // delete
+        //flightPlanDataService.deleteById("63e383b9b64a16763c50e5c8");
+        //flightPlanDataService.deleteAllFromParis();
+        //flightPlanDataService.deleteAll();
     }
 
 

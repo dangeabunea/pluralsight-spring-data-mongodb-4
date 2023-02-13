@@ -2,12 +2,11 @@ package pluralsight.flights.dal;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.TextCriteria;
-import org.springframework.data.mongodb.core.query.TextQuery;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.Service;
+import pluralsight.flights.domain.Aircraft;
 import pluralsight.flights.domain.AircraftFactory;
 import pluralsight.flights.domain.FlightPlan;
 
@@ -23,6 +22,8 @@ public class FlightPlanDataService {
         this.mongoTemplate = mongoTemplate;
     }
 
+    //QUERY
+
     public void insertInitialFlightPlans() {
         // Insert a single document
         var parisToLondon = new FlightPlan(
@@ -34,11 +35,11 @@ public class FlightPlanDataService {
                 true,
                 AircraftFactory.buildBoeing737()
         );
-        this.mongoTemplate.insert(parisToLondon);
+        this.mongoTemplate.save(parisToLondon);
 
         // Insert a list of documents
         var parisToNice = new FlightPlan(
-                "Paris. France",
+                "Paris, France",
                 "Nice, France",
                 LocalDateTime.of(2023, 7, 3, 9, 0),
                 100,
@@ -55,6 +56,16 @@ public class FlightPlanDataService {
                 List.of("Turkey", "Iran", "Pakistan", "India", "Thailand"),
                 true,
                 AircraftFactory.buildAirbusA350()
+        );
+
+        var istanbulToBucharest = new FlightPlan(
+                "Istanbul, Turkey",
+                "Bucharest, Romania",
+                LocalDateTime.of(2023, 12, 15, 21, 30),
+                600,
+                List.of("Turkey", "Romania"),
+                true,
+                AircraftFactory.buildBoeing737()
         );
 
         var berlinToNewYork = new FlightPlan(
@@ -81,10 +92,11 @@ public class FlightPlanDataService {
                 parisToNice,
                 viennaToBucharest,
                 berlinToNewYork,
-                istanbulToPhuket
+                istanbulToPhuket,
+                istanbulToBucharest
         );
 
-        mongoTemplate.insertAll(flightPlans);
+        mongoTemplate.insert(flightPlans, FlightPlan.class);
     }
 
     public FlightPlan findById(String id) {
@@ -113,12 +125,12 @@ public class FlightPlanDataService {
 
         var query = new Query(withBoeing)
                 .with(Sort.by("aircraft.capacity").descending());
-        query.fields().include("id","aircraft");
+        query.fields().include("id", "aircraft");
 
         return this.mongoTemplate.find(query, FlightPlan.class);
     }
 
-    public List<FlightPlan> findByFullTextSearch(String value){
+    public List<FlightPlan> findByFullTextSearch(String value) {
         var criteria = TextCriteria
                 .forDefaultLanguage()
                 .matchingPhrase(value);
@@ -126,5 +138,49 @@ public class FlightPlanDataService {
         var query = TextQuery.queryText(criteria).sortByScore();
 
         return this.mongoTemplate.find(query, FlightPlan.class);
+    }
+
+    // UPDATE
+    
+    public void incrementDepartureTime(String id, LocalDateTime newDepartureTime) {
+        // Non-efficient way
+        // var existing = this.findById(id);
+        // existing.setDepartureDateTime(newDepartureTime);
+        // this.mongoTemplate.save(existing);
+
+        var query = new Query(Criteria.where("id").is(id));
+        var update = new Update().set("departureDateTime", newDepartureTime);
+        var objectAfterUpdate = mongoTemplate
+                .update(FlightPlan.class)
+                .matching(query)
+                .apply(update)
+                .withOptions(FindAndModifyOptions.options().returnNew(true))
+                .findAndModifyValue();
+
+        System.out.println(objectAfterUpdate);
+    }
+
+    public void changeDurationForFlightsInParis(int minutesToAdd){
+        var flightsFromParis = new Query(Criteria.where("departure").regex("Paris"));
+        var update = new Update().inc("flightDuration", minutesToAdd);
+
+        this.mongoTemplate
+                .updateMulti(flightsFromParis, update, FlightPlan.class);
+    }
+    
+    // REMOVE
+
+    public void deleteById(String id){
+        var query = new Query(Criteria.where("id").is(id));
+        mongoTemplate.remove(query, FlightPlan.class);
+    }
+
+    public void deleteAllFromParis() {
+        var flightsFromParis = new Query(Criteria.where("departure").regex("Paris"));
+        mongoTemplate.remove(flightsFromParis, FlightPlan.class);
+    }
+
+    public void deleteAll(){
+        this.mongoTemplate.remove(new Query(), FlightPlan.class);
     }
 }
