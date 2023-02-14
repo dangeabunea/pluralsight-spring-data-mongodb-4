@@ -1,14 +1,9 @@
 package pluralsight.flights;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 import pluralsight.flights.dal.FlightPlanDataService;
-import pluralsight.flights.domain.AircraftFactory;
-import pluralsight.flights.domain.FlightPlan;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 /*
 This component will be executed by Spring Framework immediately after application
@@ -16,11 +11,22 @@ bootstrap
  */
 @Component
 public class MainRunner implements CommandLineRunner {
-    public MainRunner() {
+    private FlightPlanDataService flightPlanDataService;
+
+    public MainRunner(@Qualifier("flightPlanRepositoryDataService") FlightPlanDataService flightPlanDataService) {
+        this.flightPlanDataService = flightPlanDataService;
     }
 
     @Override
     public void run(String... args) throws Exception {
+        // INSERT
 
+        // flightPlanDataService.insertInitialFlightPlans();
+
+        // QUERY
+        //System.out.println(this.flightPlanDataService.findById("ID_HERE"));
+        //System.out.println(this.flightPlanDataService.findInternationalCrossingFrance());
+        //System.out.println(this.flightPlanDataService.findFirstTwoFlightsWhichLastBetweenOneAndThreeHours());
+        //System.out.println(this.flightPlanDataService.findBoeingFlightsAndOrderBySeatCapacity());
     }
 }
