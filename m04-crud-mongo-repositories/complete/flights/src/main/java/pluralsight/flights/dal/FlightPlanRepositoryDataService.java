@@ -1,6 +1,7 @@
 package pluralsight.flights.dal;
 
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.stereotype.Service;
 import pluralsight.flights.domain.AircraftFactory;
 import pluralsight.flights.domain.FlightPlan;
@@ -117,31 +118,40 @@ public class FlightPlanRepositoryDataService implements FlightPlanDataService {
 
     @Override
     public List<FlightPlan> findByFullTextSearch(String value) {
-        return null;
+        var textCriteria = TextCriteria.forDefaultLanguage().matching(value);
+        return repository.findAllBy(textCriteria);
     }
 
     @Override
     public void incrementDepartureTime(String id, LocalDateTime newDepartureTime) {
+        var flightPlanOptional = this.repository.findById(id);
 
+        if (!flightPlanOptional.isPresent()) {
+            return;
+        }
+
+        var flightPlan = flightPlanOptional.get();
+        flightPlan.setDepartureDateTime(newDepartureTime);
+        repository.save(flightPlan);
     }
 
     @Override
     public void changeDurationForFlightsInParis(int minutesToAdd) {
-
+        repository.findAndChangeDurationByDepartureCityContains("Paris", minutesToAdd);
     }
 
     @Override
     public void deleteById(String id) {
-
+        repository.deleteById(id);
     }
 
     @Override
     public void deleteAllFromParis() {
-
+        repository.deleteAllByDepartureCityContains("Paris");
     }
 
     @Override
     public void deleteAll() {
-
+        repository.deleteAll();
     }
 }
