@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.index.TextIndexed;
@@ -40,6 +41,15 @@ public class FlightPlan {
 
     @DBRef
     private Aircraft aircraft;
+
+    @CreatedBy
+    private SecurityProperties.User user;
+
+    @CreatedDate
+    private Instant createdDate;
+
+    @LastModifiedDate
+    private Instant lastModifiedDate;
 
     // Used inside application only
     public FlightPlan(String departureCity,
