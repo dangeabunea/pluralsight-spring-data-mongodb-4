@@ -29,19 +29,15 @@ public class MainRunner implements CommandLineRunner {
         aircraftRepository.deleteAll();
         flightPlanRepository.deleteAll();
 
-        var a350 = aircraftRepository.insert(AircraftFactory.buildAirbusA350());
-        var b747 = aircraftRepository.insert(AircraftFactory.buildBoeing747());
 
         flightPlanRepository.insert(new FlightPlan(
-                "Paris",
-                "London",
-                LocalDateTime.of(2023, 6, 1, 20, 15),
-                60 * 90,
-                List.of("France", "England"),
+                "Vienna",
+                "Bucharest",
+                LocalDateTime.of(2023, 5, 1, 20, 15),
+                60 * 70,
+                List.of("Austria", "Hngary", "Romania"),
                 true,
-                a350
+                AircraftFactory.buildEmbraerE175()
         ));
-
-        System.out.println(this.flightPlanRepository.findAll());
     }
 }
