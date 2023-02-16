@@ -21,8 +21,8 @@ public class FlightsApplication {
 	@Bean
 	public MongoCustomConversions mongoCustomConversions() {
 		var list = new ArrayList<>();
-		list.add(new FlightPlanReadConverter());
-		list.add(new FlightPlanWriteConverter());
+		// list.add(new FlightPlanReadConverter());
+		// list.add(new FlightPlanWriteConverter());
 		return new MongoCustomConversions(list);
 	}
 }

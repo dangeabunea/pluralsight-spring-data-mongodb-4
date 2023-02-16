@@ -1,13 +1,18 @@
 package pluralsight.flights.domain;
 
 import org.bson.json.JsonObject;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.index.TextIndexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -32,11 +37,9 @@ public class FlightPlan {
     @TextIndexed
     private List<String> crossedCountries;
     private boolean isInternational;
-    private Aircraft aircraft;
 
-    // Used by Spring Data MongoDB for object creation
-    // See https://docs.spring.io/spring-data/mongodb/docs/current/reference/html/#mapping-chapter
-    protected FlightPlan(){}
+    @DBRef
+    private Aircraft aircraft;
 
     // Used inside application only
     public FlightPlan(String departureCity,
