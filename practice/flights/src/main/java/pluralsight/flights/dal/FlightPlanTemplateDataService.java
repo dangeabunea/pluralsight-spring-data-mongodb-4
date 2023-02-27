@@ -3,7 +3,7 @@ package pluralsight.flights.dal;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
-import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.Service;
 import pluralsight.flights.domain.AircraftFactory;
@@ -13,15 +13,16 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class FlightPlanDataService {
-    private MongoOperations mongoOperations;
+public class FlightPlanTemplateDataService implements FlightPlanDataService {
+    private MongoTemplate mongoTemplate;
 
-    public FlightPlanDataService(MongoOperations mongoOperations) {
-        this.mongoOperations = mongoOperations;
+    public FlightPlanTemplateDataService(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
     }
 
     //QUERY
 
+    @Override
     public void insertInitialFlightPlans() {
         // Insert a single document
         var parisToLondon = new FlightPlan(
@@ -33,7 +34,7 @@ public class FlightPlanDataService {
                 true,
                 AircraftFactory.buildBoeing737()
         );
-        this.mongoOperations.save(parisToLondon);
+        this.mongoTemplate.save(parisToLondon);
 
         // Insert a list of documents
         var parisToNice = new FlightPlan(
@@ -94,30 +95,34 @@ public class FlightPlanDataService {
                 istanbulToBucharest
         );
 
-        mongoOperations.insert(flightPlans, FlightPlan.class);
+        mongoTemplate.insert(flightPlans, FlightPlan.class);
     }
 
+    @Override
     public FlightPlan findById(String id) {
-        return this.mongoOperations.findById(id, FlightPlan.class);
+        return this.mongoTemplate.findById(id, FlightPlan.class);
     }
 
+    @Override
     public List<FlightPlan> findInternationalCrossingFrance() {
         var isInternational = Criteria.where("isInternational").is(true);
         var crossingFrance = Criteria.where("crossedCountries").in("France");
         var criteria = new Criteria().andOperator(List.of(isInternational, crossingFrance));
         var query = new Query(criteria);
 
-        return this.mongoOperations.find(query, FlightPlan.class);
+        return this.mongoTemplate.find(query, FlightPlan.class);
     }
 
+    @Override
     public List<FlightPlan> findFirstTwoFlightsWhichLastBetweenOneAndThreeHours() {
         var criteria = Criteria.where("flightDuration").gte(60).lte(180);
 
         var query = new Query(criteria).with(PageRequest.of(0, 2));
 
-        return this.mongoOperations.find(query, FlightPlan.class);
+        return this.mongoTemplate.find(query, FlightPlan.class);
     }
 
+    @Override
     public List<FlightPlan> findBoeingFlightsAndOrderBySeatCapacity() {
         var withBoeing = Criteria.where("aircraft.model").regex("Boeing");
 
@@ -125,9 +130,10 @@ public class FlightPlanDataService {
                 .with(Sort.by("aircraft.capacity").descending());
         query.fields().include("id", "aircraft");
 
-        return this.mongoOperations.find(query, FlightPlan.class);
+        return this.mongoTemplate.find(query, FlightPlan.class);
     }
 
+    @Override
     public List<FlightPlan> findByFullTextSearch(String value) {
         var criteria = TextCriteria
                 .forDefaultLanguage()
@@ -135,11 +141,12 @@ public class FlightPlanDataService {
 
         var query = TextQuery.queryText(criteria).sortByScore();
 
-        return this.mongoOperations.find(query, FlightPlan.class);
+        return this.mongoTemplate.find(query, FlightPlan.class);
     }
 
     // UPDATE
     
+    @Override
     public void incrementDepartureTime(String id, LocalDateTime newDepartureTime) {
         // Non-efficient way
         // var existing = this.findById(id);
@@ -148,7 +155,7 @@ public class FlightPlanDataService {
 
         var query = new Query(Criteria.where("id").is(id));
         var update = new Update().set("departureDateTime", newDepartureTime);
-        var objectAfterUpdate = mongoOperations
+        var objectAfterUpdate = mongoTemplate
                 .update(FlightPlan.class)
                 .matching(query)
                 .apply(update)
@@ -158,27 +165,31 @@ public class FlightPlanDataService {
         System.out.println(objectAfterUpdate);
     }
 
+    @Override
     public void changeDurationForFlightsInParis(int minutesToAdd){
         var flightsFromParis = new Query(Criteria.where("departure").regex("Paris"));
         var update = new Update().inc("flightDuration", minutesToAdd);
 
-        this.mongoOperations
+        this.mongoTemplate
                 .updateMulti(flightsFromParis, update, FlightPlan.class);
     }
     
     // REMOVE
 
+    @Override
     public void deleteById(String id){
         var query = new Query(Criteria.where("id").is(id));
-        mongoOperations.remove(query, FlightPlan.class);
+        mongoTemplate.remove(query, FlightPlan.class);
     }
 
+    @Override
     public void deleteAllFromParis() {
         var flightsFromParis = new Query(Criteria.where("departure").regex("Paris"));
-        mongoOperations.remove(flightsFromParis, FlightPlan.class);
+        mongoTemplate.remove(flightsFromParis, FlightPlan.class);
     }
 
+    @Override
     public void deleteAll(){
-        this.mongoOperations.remove(new Query(), FlightPlan.class);
+        this.mongoTemplate.remove(new Query(), FlightPlan.class);
     }
 }
