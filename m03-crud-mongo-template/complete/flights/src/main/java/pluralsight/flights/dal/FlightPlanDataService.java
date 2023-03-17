@@ -33,7 +33,7 @@ public class FlightPlanDataService {
                 true,
                 AircraftFactory.buildBoeing737()
         );
-        this.mongoOperations.save(parisToLondon);
+        this.mongoOperations.insert(parisToLondon);
 
         // Insert a list of documents
         var parisToNice = new FlightPlan(
@@ -94,7 +94,7 @@ public class FlightPlanDataService {
                 istanbulToBucharest
         );
 
-        mongoOperations.insert(flightPlans);
+        mongoOperations.insert(flightPlans, FlightPlan.class);
     }
 
     public FlightPlan findById(String id) {
