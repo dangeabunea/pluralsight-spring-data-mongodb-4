@@ -94,7 +94,7 @@ public class FlightPlanDataService {
                 istanbulToBucharest
         );
 
-        mongoOperations.insert(flightPlans, FlightPlan.class);
+        mongoOperations.insert(flightPlans);
     }
 
     public FlightPlan findById(String id) {
