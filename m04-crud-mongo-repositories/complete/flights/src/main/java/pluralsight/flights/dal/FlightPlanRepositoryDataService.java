@@ -123,7 +123,7 @@ public class FlightPlanRepositoryDataService implements FlightPlanDataService {
     }
 
     @Override
-    public void incrementDepartureTime(String id, LocalDateTime newDepartureTime) {
+    public void changeDepartureTimeById(String id, LocalDateTime newDepartureTime) {
         var flightPlanOptional = this.repository.findById(id);
 
         if (!flightPlanOptional.isPresent()) {
@@ -136,7 +136,7 @@ public class FlightPlanRepositoryDataService implements FlightPlanDataService {
     }
 
     @Override
-    public void changeDurationForFlightsInParis(int minutesToAdd) {
+    public void incrementDurationForFlightsInParis(int minutesToAdd) {
         repository.findAndChangeDurationByDepartureCityContains("Paris", minutesToAdd);
     }
 

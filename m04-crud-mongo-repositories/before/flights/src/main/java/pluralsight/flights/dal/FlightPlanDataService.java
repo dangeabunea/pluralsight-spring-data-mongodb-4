@@ -6,13 +6,11 @@ import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.Service;
-import pluralsight.flights.domain.Aircraft;
 import pluralsight.flights.domain.AircraftFactory;
 import pluralsight.flights.domain.FlightPlan;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class FlightPlanDataService {
@@ -142,7 +140,7 @@ public class FlightPlanDataService {
 
     // UPDATE
     
-    public void incrementDepartureTime(String id, LocalDateTime newDepartureTime) {
+    public void changeDepartureTimeById(String id, LocalDateTime newDepartureTime) {
         // Non-efficient way
         // var existing = this.findById(id);
         // existing.setDepartureDateTime(newDepartureTime);
@@ -160,7 +158,7 @@ public class FlightPlanDataService {
         System.out.println(objectAfterUpdate);
     }
 
-    public void changeDurationForFlightsInParis(int minutesToAdd){
+    public void incrementDurationForFlightsInParis(int minutesToAdd){
         var flightsFromParis = new Query(Criteria.where("departure").regex("Paris"));
         var update = new Update().inc("flightDuration", minutesToAdd);
 

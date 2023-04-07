@@ -18,9 +18,9 @@ public interface FlightPlanDataService {
 
     List<FlightPlan> findByFullTextSearch(String value);
 
-    void incrementDepartureTime(String id, LocalDateTime newDepartureTime);
+    void changeDepartureTimeById(String id, LocalDateTime newDepartureTime);
 
-    void changeDurationForFlightsInParis(int minutesToAdd);
+    void incrementDurationForFlightsInParis(int minutesToAdd);
 
     void deleteById(String id);
 

@@ -147,7 +147,7 @@ public class FlightPlanTemplateDataService implements FlightPlanDataService {
     // UPDATE
     
     @Override
-    public void incrementDepartureTime(String id, LocalDateTime newDepartureTime) {
+    public void changeDepartureTimeById(String id, LocalDateTime newDepartureTime) {
         // Non-efficient way
         // var existing = this.findById(id);
         // existing.setDepartureDateTime(newDepartureTime);
@@ -166,7 +166,7 @@ public class FlightPlanTemplateDataService implements FlightPlanDataService {
     }
 
     @Override
-    public void changeDurationForFlightsInParis(int minutesToAdd){
+    public void incrementDurationForFlightsInParis(int minutesToAdd){
         var flightsFromParis = new Query(Criteria.where("departure").regex("Paris"));
         var update = new Update().inc("flightDuration", minutesToAdd);
 
