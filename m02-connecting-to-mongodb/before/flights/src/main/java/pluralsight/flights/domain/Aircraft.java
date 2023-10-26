@@ -4,7 +4,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 public class Aircraft {
     private String model;
-    @Field("capacity")
     private int seatCapacity;
     private WakeTurbulence wakeTurbulence;
 

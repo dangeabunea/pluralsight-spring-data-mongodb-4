@@ -8,20 +8,11 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-@Document(collection = "FlightPlans")
 public class FlightPlan {
-    @Id private String id;
-
-    @Field(name = "departure")
+    private String id;
     private String departureCity;
-
-    @Field(name = "destination")
     private String destinationCity;
-
-    @Indexed(direction = IndexDirection.ASCENDING)
     private LocalDateTime departureDateTime;
-
     private int flightDuration;
     private List<String> crossedCountries;
     private boolean isInternational;
