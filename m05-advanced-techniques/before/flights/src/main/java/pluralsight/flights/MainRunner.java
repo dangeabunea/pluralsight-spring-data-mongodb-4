@@ -23,14 +23,6 @@ public class MainRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        flightPlanRepository.insert(new FlightPlan(
-                "Vienna",
-                "Bucharest",
-                LocalDateTime.of(2023, 5, 1, 20, 15),
-                60 * 70,
-                List.of("Austria", "Hngary", "Romania"),
-                true,
-                AircraftFactory.buildEmbraerE175()
-        ));
+
     }
 }
