@@ -42,15 +42,6 @@ public class FlightPlan {
     @DBRef
     private Aircraft aircraft;
 
-    @CreatedBy
-    private SecurityProperties.User user;
-
-    @CreatedDate
-    private Instant createdDate;
-
-    @LastModifiedDate
-    private Instant lastModifiedDate;
-
     // Used inside application only
     public FlightPlan(String departureCity,
                       String destinationCity,

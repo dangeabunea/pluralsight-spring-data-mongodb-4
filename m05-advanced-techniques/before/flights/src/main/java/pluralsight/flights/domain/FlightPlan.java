@@ -55,6 +55,10 @@ public class FlightPlan {
         this.aircraft = aircraft;
     }
 
+    public String getId() {
+        return id;
+    }
+
     public String getDepartureCity() {
         return departureCity;
     }

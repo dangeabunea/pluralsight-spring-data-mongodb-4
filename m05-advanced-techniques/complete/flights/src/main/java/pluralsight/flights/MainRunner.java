@@ -29,7 +29,6 @@ public class MainRunner implements CommandLineRunner {
         aircraftRepository.deleteAll();
         flightPlanRepository.deleteAll();
 
-
         flightPlanRepository.insert(new FlightPlan(
                 "Vienna",
                 "Bucharest",
